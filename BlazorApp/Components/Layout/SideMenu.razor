@@ -1,0 +1,13 @@
+﻿
+@rendermode InteractiveAuto
+<RadzenSidebar @bind-Expanded="@sidebar1Expanded">
+    <RadzenPanelMenu>
+        <RadzenPanelMenuItem Text="Home" Icon="home" Path="" />
+        <RadzenPanelMenuItem Text="Users" Icon="account_box" Path="counter" />
+    </RadzenPanelMenu>
+</RadzenSidebar>
+@code {
+    [Parameter] 
+    public bool sidebar1Expanded { get; set; }
+
+}
