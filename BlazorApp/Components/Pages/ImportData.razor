@@ -1,0 +1,34 @@
+﻿@page "/importData"
+@using Share.Provider
+@using Share.Provider.DbModels
+@using System.Text.Json
+@inject FirestoreProvider firestoreProvider
+<h3>ImportData</h3>
+
+<p>
+    @filePath
+</p>
+
+<p>
+    @data
+</p>
+
+@code {
+    public string filePath = "../Data.json";
+    public List<Question>? questions = new List<Question>();
+    public string data = "";
+    protected override async Task OnInitializedAsync()
+    {
+        // read file into a string and deserialize JSON to a type question
+        data = await System.IO.File.ReadAllTextAsync(filePath);
+        questions = JsonSerializer.Deserialize<List<Question>>(data);
+        foreach (var question in questions)
+        {
+            var fireStoreQuestion = await firestoreProvider.WhereEqualTo<Question, int>("Number", question.Number?? 0);
+            if (fireStoreQuestion.Count == 0)
+            {
+                await firestoreProvider.AddOrUpdate(question);
+            }
+        }
+    }
+}

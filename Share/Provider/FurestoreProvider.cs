@@ -31,13 +31,18 @@ public class FirestoreProvider
         return snapshot.Documents.Select(x => x.ConvertTo<T>()).ToList();
     }
 
-    public async Task<IReadOnlyCollection<T>> WhereEqualTo<T>(string fieldPath, object value, CancellationToken ct = default) where T : IFirebaseEntity
+    public async Task<IReadOnlyCollection<T>> WhereEqualTo<T, VT>(string fieldPath, VT value, CancellationToken ct = default) where T : IFirebaseEntity
     {
         return await GetList<T>(_fireStoreDb.Collection(typeof(T).Name).WhereEqualTo(fieldPath, value), ct);
     }
     public async Task<IReadOnlyCollection<T>> WhereIn<T, VT>(string fieldPath, IEnumerable<VT> value, CancellationToken ct = default) where T : IFirebaseEntity
     {
         return await GetList<T>(_fireStoreDb.Collection(typeof(T).Name).WhereIn(fieldPath, value), ct);
+    }
+    public async Task<int> GetAllCount<T>(CancellationToken ct = default) where T : IFirebaseEntity
+    {
+        var collection = _fireStoreDb.Collection(typeof(T).Name);
+        return (int?)(await collection.Count().GetSnapshotAsync(ct)).Count ?? 0;
     }
     private static async Task<IReadOnlyCollection<T>> GetList<T>(Query query, CancellationToken ct = default) where T : IFirebaseEntity
     {

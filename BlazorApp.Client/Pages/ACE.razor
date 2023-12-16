@@ -1,5 +1,5 @@
 ﻿@page "/"
-@rendermode InteractiveAuto
+@rendermode InteractiveWebAssembly
 @using Share.Provider
 @using Share.Provider.DbModels
 @using Google.Cloud.Firestore
@@ -43,14 +43,14 @@
         }
         else
         {
-            <RadzenNumeric @bind-Value=@questionCount Min="1" Max="60" />
+            <RadzenNumeric @bind-Value=@takeQuestionCount Min="1" @bind-Max="@allQuestionCount" />
             <RadzenButton Click=@(args => ButtonClicked()) Text="Refresh" ButtonStyle="ButtonStyle.Primary" />
             <RadzenButton Click=@(args => Submit()) Text="Submit" ButtonStyle="ButtonStyle.Primary" />
             @foreach (var question in questions)
             {
-                <RadzenFieldset Text=@question.Content.Substring(0, 3)>
+                <RadzenFieldset Text=@("#" + question.Number.ToString())>
                     <div class="mb-3">
-                        <RadzenText TextStyle="TextStyle.H5" Style="line-height: 1.5;">@question.Content.Substring(3)</RadzenText>
+                        <RadzenText TextStyle="TextStyle.H5" Style="line-height: 1.5;">@question.Content</RadzenText>
                             <RadzenRadioButtonList @bind-Value=@question.CurrentAnswer Orientation=Orientation.Vertical>
                                 <Items>
                                     @for (int i = 0; i < 4; i++)
@@ -111,14 +111,11 @@
     bool sidebarExpanded = false;
     private IReadOnlyCollection<Question>? questions;
     bool showAnswer = false;
-    int questionCount = 1;
+    int takeQuestionCount = 1;
+    int allQuestionCount = 0;
     protected override async Task OnInitializedAsync()
     {
-        // Simulate asynchronous loading to demonstrate streaming rendering
-        await Task.Delay(500);
-        // await firestoreProvider.AddOrUpdate<Question>(new Question(), cancellationTokenSource.Token);
-        // questions = await firestoreProvider.GetAll<Question>();
-        // questions = questions.OrderBy(t => t.Number).ToList();
+        allQuestionCount = await firestoreProvider.GetAllCount<Question>();
         await ButtonClicked();
     }
     async Task ButtonClicked()
@@ -130,7 +127,7 @@
                 return;
         }
         showAnswer = false;
-        int[] randomNumbers = Enumerable.Range(0, 31).OrderBy(x => Guid.NewGuid()).Take(questionCount).ToArray();
+        int[] randomNumbers = Enumerable.Range(0, allQuestionCount).OrderBy(x => Guid.NewGuid()).Take(takeQuestionCount).ToArray();
 
         IEnumerable<int> enumerable = randomNumbers as IEnumerable<int>;
 

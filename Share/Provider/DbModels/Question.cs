@@ -9,6 +9,8 @@ namespace Share.Provider.DbModels
         public string Id { get; set; }
         [FirestoreProperty]
         public int? Number { get; set; }
+        [FirestoreProperty]
+        public string? Type { get; set; }
 
         [FirestoreProperty]
         public string? Content { get; set; }
