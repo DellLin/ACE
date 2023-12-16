@@ -63,7 +63,7 @@
                                     }
                                     else
                                     {
-                                        <RadzenRadioButtonListItem Text=@question.GetType().GetProperty("Option"+ (i + 1).ToString())!.GetValue(question, null)!.ToString()
+                                        <RadzenRadioButtonListItem Disabled="true" Text=@question.GetType().GetProperty("Option"+ (i + 1).ToString())!.GetValue(question, null)!.ToString()
                                                                    Value="@(((char)('A'+i)).ToString())"
                                                                    class=@("rz-p-1 rz-border-radius" +
                                                                    (question.CurrentAnswer?.ToString() == ((char)('A'+ i)).ToString()?
@@ -116,23 +116,27 @@
     protected override async Task OnInitializedAsync()
     {
         allQuestionCount = await firestoreProvider.GetAllCount<Question>();
-        await ButtonClicked();
+        await RefreshQuestion();
     }
     async Task ButtonClicked()
     {
-        if (questions?.Any(t => t.CurrentAnswer != null) == true)
+        if (!showAnswer && questions?.Any(t => t.CurrentAnswer != null) == true)
         {
             var confirmResult = await DialogService.Confirm("There are answered questions, do you want to refresh?", "Warning", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" });
             if (confirmResult == false)
                 return;
         }
         showAnswer = false;
+        await RefreshQuestion();
+        NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Info, Summary = "Info", Detail = "Refresh success" });
+    }
+    async Task RefreshQuestion()
+    {
         int[] randomNumbers = Enumerable.Range(0, allQuestionCount).OrderBy(x => Guid.NewGuid()).Take(takeQuestionCount).ToArray();
 
         IEnumerable<int> enumerable = randomNumbers as IEnumerable<int>;
 
         questions = await firestoreProvider.WhereIn<Question, int>("Number", enumerable);
-        NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Info, Summary = "Info", Detail = "Refresh success" });
     }
     async Task Submit()
     {
