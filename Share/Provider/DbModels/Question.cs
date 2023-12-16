@@ -26,6 +26,8 @@ namespace Share.Provider.DbModels
         public string? Option5 { get; set; }
         [FirestoreProperty]
         public string? Answer { get; set; }
+        [FirestoreProperty]
+        public string? ImageSrc { get; set; }
         public string? CurrentAnswer { get; set; }
         public string[] MultiCurrentAnswer { get; set; }
         public Question()

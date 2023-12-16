@@ -53,3 +53,11 @@ h1:focus {
 .components-reconnect-show, .components-reconnect-failed, .components-reconnect-rejected {
     display: none;
 }
+
+.float-btn {
+
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 1000;
+}

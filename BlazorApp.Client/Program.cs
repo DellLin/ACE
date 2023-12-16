@@ -3,6 +3,7 @@ using Google.Api.Gax;
 using Google.Cloud.Firestore;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Radzen;
+using Share;
 using Share.Provider;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -14,6 +15,8 @@ builder.Services.AddSingleton(_ => new FirestoreProvider(
         EmulatorDetection = EmulatorDetection.EmulatorOrProduction
     }.Build()
 ));
+builder.Services.AddScoped<CacheStorageAccessor>();
+
 builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddRadzenComponents();
 await builder.Build().RunAsync();

@@ -4,6 +4,7 @@ using BlazorApp.Settings;
 using Google.Api.Gax;
 using Google.Cloud.Firestore;
 using Radzen;
+using Share;
 using Share.Provider;
 using System.Text.Json;
 
@@ -22,6 +23,7 @@ builder.Services.AddSingleton(_ => new FirestoreProvider(
         EmulatorDetection = EmulatorDetection.EmulatorOrProduction
     }.Build()
 ));
+builder.Services.AddScoped<CacheStorageAccessor>();
 builder.Services.AddRadzenComponents();
 var app = builder.Build();
 
