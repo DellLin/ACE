@@ -153,19 +153,20 @@
     }
     async Task ButtonClicked()
     {
-        showAnswer = false;
-        if (takeQuestionNumber != 0)
-        {
-            await GetQuestionByNumber();
-            return;
-        }
-
         if (!showAnswer && questions?.Any(t => t.CurrentAnswer != null) == true)
         {
             var confirmResult = await DialogService.Confirm("There are answered questions, do you want to refresh?", "Warning", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" });
             if (confirmResult == false)
                 return;
         }
+        showAnswer = false;
+
+        if (takeQuestionNumber != 0)
+        {
+            await GetQuestionByNumber();
+            return;
+        }
+
         await RefreshQuestion();
         NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Info, Summary = "Info", Detail = "Refresh success" });
     }
