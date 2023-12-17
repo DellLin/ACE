@@ -148,7 +148,7 @@
     int allQuestionCount = 0;
     protected override async Task OnInitializedAsync()
     {
-        allQuestionCount = await firestoreProvider.GetAllCount<Question>();
+        allQuestionCount = 30;//await firestoreProvider.GetAllCount<Question>();
         await RefreshQuestion();
     }
     async Task ButtonClicked()
