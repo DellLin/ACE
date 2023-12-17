@@ -45,28 +45,27 @@
         {
             <RadzenRow>
 
-                <RadzenColumn SizeXS="2" SizeMD="1">
-                    <RadzenNumeric @bind-Value=@takeQuestionNumber Min="0" @bind-Max="@allQuestionCount" ShowUpDown="false" Style="" />
+                <RadzenColumn Size="6" SizeXS="2" SizeSM="2" SizeMD="2" SizeLG="1" SizeXL="1">
+                    <RadzenFormField Text="指定題號" Style="width: 100%;">
+                        <RadzenNumeric @bind-Value=@takeQuestionNumber Min="0" @bind-Max="@allQuestionCount" ShowUpDown="false" Style="width: 100%" />
+                    </RadzenFormField>
                 </RadzenColumn>
 
-                <RadzenColumn SizeXS="3" SizeMD="2">
+                <RadzenColumn Size="6" SizeXS="4" SizeSM="3" SizeMD="2" SizeLG="2" SizeXL="1">
                     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="0">
-
-                        <RadzenNumeric @bind-Value=@takeQuestionCount Min="1" @bind-Max="@allQuestionCount" ShowUpDown="false" />
-                        <RadzenButton Icon="keyboard_arrow_up" Click=@(() => takeQuestionCount += takeQuestionCount < allQuestionCount ? 1 : 0) ButtonStyle="ButtonStyle.Primary" class="rz-border-radius-0" />
-                        <RadzenButton Icon="keyboard_arrow_down" Click=@(() => takeQuestionCount -= takeQuestionCount > 1 ? 1 : 0) ButtonStyle="ButtonStyle.Primary" Style="border-radius:0 0.25rem 0.25rem 0;" />
+                        <RadzenFormField Text="隨機題數" Style="width: 100%;">
+                            <RadzenNumeric @bind-Value=@takeQuestionCount Min="1" @bind-Max="@allQuestionCount" ShowUpDown="false" />
+                        </RadzenFormField>
+                        <RadzenButton Icon="keyboard_arrow_up" Click=@(() => takeQuestionCount += takeQuestionCount < allQuestionCount ? 1 : 0) ButtonStyle="ButtonStyle.Primary" class="rz-border-radius-0" Style="margin: var(--rz-form-field-margin)" />
+                        <RadzenButton Icon="keyboard_arrow_down" Click=@(() => takeQuestionCount -= takeQuestionCount > 1 ? 1 : 0) ButtonStyle="ButtonStyle.Primary" Style="border-radius:0 0.25rem 0.25rem 0;margin: var(--rz-form-field-margin)" />
                     </RadzenStack>
                 </RadzenColumn>
 
-                <RadzenColumn SizeXS="2" SizeMD="1">
-                    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start">
-                        <RadzenButton Click=@(args => ButtonClicked()) Text="Refresh" ButtonStyle="ButtonStyle.Secondary" />
-                    </RadzenStack>
+                <RadzenColumn Size="12" SizeXS="3" SizeSM="2" SizeMD="2" SizeLG="1" SizeXL="1">
+                    <RadzenButton Click=@(args => ButtonClicked()) Text="Refresh" ButtonStyle="ButtonStyle.Secondary" Style="width: 100%;margin: var(--rz-form-field-margin)" />
                 </RadzenColumn>
-                <RadzenColumn SizeXS="2" SizeMD="1">
-                    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start">
-                        <RadzenButton Click=@(args => Submit()) Text="Submit" ButtonStyle="ButtonStyle.Success" />
-                    </RadzenStack>
+                <RadzenColumn Size="12" SizeXS="3" SizeSM="2" SizeMD="2" SizeLG="1" SizeXL="1">
+                    <RadzenButton Click=@(args => Submit()) Text="Submit" ButtonStyle="ButtonStyle.Success" Style="width: 100%;margin: var(--rz-form-field-margin)" />
                 </RadzenColumn>
             </RadzenRow>
             <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Start">
@@ -91,7 +90,8 @@
                                             {
                                                 <RadzenRadioButtonListItem Text=@question.GetType().GetProperty("Option"+ (i + 1).ToString())!.GetValue(question, null)!.ToString()
                                                                            Value="@(((char)('A'+i)).ToString())"
-                                                                           class=@("rz-p-1 rz-border-radius" +(question.CurrentAnswer?.ToString() == ((char)('A'+ i)).ToString()?" rz-background-color-secondary":"")) />
+                                                                           class=@("rz-p-1 rz-border-radius" +(question.CurrentAnswer?.ToString() == ((char)('A'+ i)).ToString()?" rz-background-color-secondary":""))
+                                                                           Style="white-space: pre-line" />
                                             }
                                             else
                                             {
@@ -100,7 +100,8 @@
                                                                            class=@("rz-p-1 rz-border-radius" +
                                                            (question.CurrentAnswer?.ToString() == ((char)('A'+ i)).ToString()?
                                                            question.CurrentAnswer?.ToString()==question.Answer? " rz-background-color-success":" rz-background-color-danger":
-                                                           question.Answer?.ToString()==((char)('A'+ i)).ToString()?" rz-background-color-success":"")) />
+                                                           question.Answer?.ToString()==((char)('A'+ i)).ToString()?" rz-background-color-success":""))
+                                                                           Style="white-space: pre-line" />
                                             }
 
                                         }

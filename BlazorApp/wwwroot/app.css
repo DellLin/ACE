@@ -61,3 +61,6 @@ h1:focus {
     right: 1rem;
     z-index: 1000;
 }
+.rz-radiobutton-label {
+    white-space: pre-line;
+}
