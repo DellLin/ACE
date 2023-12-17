@@ -55,7 +55,7 @@
                 <RadzenColumn Size="6" SizeXS="4" SizeSM="3" SizeMD="2" SizeLG="2" SizeXL="1">
                     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="0">
                         <RadzenFormField Text="隨機題數" Style="width: 100%;">
-                            <RadzenNumeric @bind-Value=@takeQuestionCount Min="1" Max="30" ShowUpDown="false" />
+                                <RadzenNumeric @bind-Value=@takeQuestionCount Min="1" @bind-Max="@allQuestionCount" ShowUpDown="false" />
                         </RadzenFormField>
                         <RadzenButton Icon="keyboard_arrow_up" Click=@(() => takeQuestionCount += takeQuestionCount < allQuestionCount ? 1 : 0) ButtonStyle="ButtonStyle.Primary" class="rz-border-radius-0" Style="margin: var(--rz-form-field-margin)" />
                         <RadzenButton Icon="keyboard_arrow_down" Click=@(() => takeQuestionCount -= takeQuestionCount > 1 ? 1 : 0) ButtonStyle="ButtonStyle.Primary" Style="border-radius:0 0.25rem 0.25rem 0;margin: var(--rz-form-field-margin)" />
@@ -142,6 +142,7 @@
     string testString = "test\r\ntest";
     bool sidebarExpanded = false;
     private IReadOnlyCollection<Question>? questions;
+    private IReadOnlyCollection<Question>? allQuestions;
     bool showAnswer = false;
     int takeQuestionNumber = 0;
     int takeQuestionCount = 1;
@@ -170,18 +171,32 @@
         await RefreshQuestion();
         NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Info, Summary = "Info", Detail = "Refresh success" });
     }
+    async Task UpdateAllQuestion()
+    {
+        if (allQuestions == null)
+        {
+            allQuestions = (await firestoreProvider.GetAll<Question>()).Where(t => t.Number != null).ToArray();
+        }
+    }
     async Task RefreshQuestion()
     {
         int[] randomNumbers = Enumerable.Range(0, allQuestionCount).OrderBy(x => Guid.NewGuid()).Take(takeQuestionCount).ToArray();
 
         IEnumerable<int> enumerable = randomNumbers as IEnumerable<int>;
-
-        questions = await firestoreProvider.WhereIn<Question, int>("Number", enumerable);
+        if (allQuestions == null)
+        {
+            await UpdateAllQuestion();
+        }
+        questions = allQuestions!.Where(t => enumerable.Contains(t.Number??0)).ToArray();
     }
     async Task GetQuestionByNumber()
     {
-        var question = await firestoreProvider.WhereEqualTo<Question, int>("Number", takeQuestionNumber);
-        if (question.Count == 0)
+        if (allQuestions == null)
+        {
+            await UpdateAllQuestion();
+        }
+        var question = allQuestions!.Where(t => t.Number == takeQuestionNumber).ToArray();
+        if (question == null)
         {
             NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "Question not found" });
             return;
