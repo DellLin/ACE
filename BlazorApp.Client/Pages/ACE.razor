@@ -45,56 +45,70 @@
         {
             <RadzenRow>
 
-                <RadzenNumeric @bind-Value=@takeQuestionNumber Min="0" @bind-Max="@allQuestionCount" ShowUpDown="false" Style="" />
+                <RadzenColumn SizeXS="2" SizeMD="1">
+                    <RadzenNumeric @bind-Value=@takeQuestionNumber Min="0" @bind-Max="@allQuestionCount" ShowUpDown="false" Style="" />
+                </RadzenColumn>
 
-                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="0">
+                <RadzenColumn SizeXS="3" SizeMD="2">
+                    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="0">
 
-                    <RadzenNumeric @bind-Value=@takeQuestionCount Min="1" @bind-Max="@allQuestionCount" ShowUpDown="false" />
-                    <RadzenButton Icon="keyboard_arrow_up" Click=@(() => takeQuestionCount += takeQuestionCount < allQuestionCount ? 1 : 0) ButtonStyle="ButtonStyle.Primary" class="rz-border-radius-0" />
-                    <RadzenButton Icon="keyboard_arrow_down" Click=@(() => takeQuestionCount -= takeQuestionCount > 1 ? 1 : 0) ButtonStyle="ButtonStyle.Primary" Style="border-radius:0 0.25rem 0.25rem 0;" />
-                </RadzenStack>
+                        <RadzenNumeric @bind-Value=@takeQuestionCount Min="1" @bind-Max="@allQuestionCount" ShowUpDown="false" />
+                        <RadzenButton Icon="keyboard_arrow_up" Click=@(() => takeQuestionCount += takeQuestionCount < allQuestionCount ? 1 : 0) ButtonStyle="ButtonStyle.Primary" class="rz-border-radius-0" />
+                        <RadzenButton Icon="keyboard_arrow_down" Click=@(() => takeQuestionCount -= takeQuestionCount > 1 ? 1 : 0) ButtonStyle="ButtonStyle.Primary" Style="border-radius:0 0.25rem 0.25rem 0;" />
+                    </RadzenStack>
+                </RadzenColumn>
 
-                <RadzenButton Click=@(args => ButtonClicked()) Text="Refresh" ButtonStyle="ButtonStyle.Secondary" />
-                <RadzenButton Click=@(args => Submit()) Text="Submit" ButtonStyle="ButtonStyle.Success" />
+                <RadzenColumn SizeXS="2" SizeMD="1">
+                    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start">
+                        <RadzenButton Click=@(args => ButtonClicked()) Text="Refresh" ButtonStyle="ButtonStyle.Secondary" />
+                    </RadzenStack>
+                </RadzenColumn>
+                <RadzenColumn SizeXS="2" SizeMD="1">
+                    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start">
+                        <RadzenButton Click=@(args => Submit()) Text="Submit" ButtonStyle="ButtonStyle.Success" />
+                    </RadzenStack>
+                </RadzenColumn>
             </RadzenRow>
             <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Start">
             </RadzenStack>
-            
-            @foreach (var question in questions)
-        {
-            <RadzenRow>
-                <RadzenFieldset Text=@("#" + question.Number.ToString())>
-                    <div class="">
-                        <RadzenText TextStyle="TextStyle.H5" Style="line-height: 1.5;">@question.Content</RadzenText>
-                            @if (question.ImageSrc != null)
-                        {
-                            <RadzenImage Path=@(question.Number + ".svg") Style="width: 100%;" />
-                        }
-                        <RadzenRadioButtonList @bind-Value=@question.CurrentAnswer Orientation=Orientation.Vertical>
-                            <Items>
-                                @for (int i = 0; i < 4; i++)
-                                {
-                                    if (!showAnswer)
-                                    {
-                                        <RadzenRadioButtonListItem Text=@question.GetType().GetProperty("Option"+ (i + 1).ToString())!.GetValue(question, null)!.ToString()
-                                                                   Value="@(((char)('A'+i)).ToString())"
-                                                                   class=@("rz-p-1 rz-border-radius" +(question.CurrentAnswer?.ToString() == ((char)('A'+ i)).ToString()?" rz-background-color-secondary":"")) />
-                                    }
-                                    else
-                                    {
-                                        <RadzenRadioButtonListItem Disabled="true" Text=@question.GetType().GetProperty("Option"+ (i + 1).ToString())!.GetValue(question, null)!.ToString()
-                                                                   Value="@(((char)('A'+i)).ToString())"
-                                                                   class=@("rz-p-1 rz-border-radius" +
-                                                   (question.CurrentAnswer?.ToString() == ((char)('A'+ i)).ToString()?
-                                                   question.CurrentAnswer?.ToString()==question.Answer? " rz-background-color-success":" rz-background-color-danger":
-                                                   question.Answer?.ToString()==((char)('A'+ i)).ToString()?" rz-background-color-success":"")) />
-                                    }
 
+            @foreach (var question in questions)
+            {
+                <RadzenRow>
+                    <RadzenColumn Size="12">
+                        <RadzenFieldset Text=@("#" + question.Number.ToString())>
+                            <div class="">
+                                <RadzenText TextStyle="TextStyle.H5" Style="line-height: 1.5;white-space: pre-line">@question.Content</RadzenText>
+                                    @if (question.ImageSrc != null)
+                                {
+                                    <RadzenImage Path=@(question.Number + ".svg") Style="width: 100%;" />
                                 }
-                            </Items>
-                        </RadzenRadioButtonList>
-                    </div>
-                    </RadzenFieldset>
+                                <RadzenRadioButtonList @bind-Value=@question.CurrentAnswer Orientation=Orientation.Vertical>
+                                    <Items>
+                                        @for (int i = 0; i < 4; i++)
+                                        {
+                                            if (!showAnswer)
+                                            {
+                                                <RadzenRadioButtonListItem Text=@question.GetType().GetProperty("Option"+ (i + 1).ToString())!.GetValue(question, null)!.ToString()
+                                                                           Value="@(((char)('A'+i)).ToString())"
+                                                                           class=@("rz-p-1 rz-border-radius" +(question.CurrentAnswer?.ToString() == ((char)('A'+ i)).ToString()?" rz-background-color-secondary":"")) />
+                                            }
+                                            else
+                                            {
+                                                <RadzenRadioButtonListItem Disabled="true" Text=@question.GetType().GetProperty("Option"+ (i + 1).ToString())!.GetValue(question, null)!.ToString()
+                                                                           Value="@(((char)('A'+i)).ToString())"
+                                                                           class=@("rz-p-1 rz-border-radius" +
+                                                           (question.CurrentAnswer?.ToString() == ((char)('A'+ i)).ToString()?
+                                                           question.CurrentAnswer?.ToString()==question.Answer? " rz-background-color-success":" rz-background-color-danger":
+                                                           question.Answer?.ToString()==((char)('A'+ i)).ToString()?" rz-background-color-success":"")) />
+                                            }
+
+                                        }
+                                    </Items>
+                                </RadzenRadioButtonList>
+                            </div>
+                        </RadzenFieldset>
+                    </RadzenColumn>
                 </RadzenRow>
             }
 
@@ -168,7 +182,7 @@
         var question = await firestoreProvider.WhereEqualTo<Question, int>("Number", takeQuestionNumber);
         if (question.Count == 0)
         {
-            NotificationService.Notify(new NotificationMessage {  Severity = NotificationSeverity.Error, Summary = "Error", Detail = "Question not found" });
+            NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "Question not found" });
             return;
         }
         questions = question;
