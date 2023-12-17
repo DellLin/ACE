@@ -79,7 +79,7 @@
                                 <RadzenText TextStyle="TextStyle.H5" Style="line-height: 1.5;white-space: pre-line">@question.Content</RadzenText>
                                     @if (question.ImageSrc != null)
                                 {
-                                    <RadzenImage Path=@(question.Number + ".svg") Style="width: 100%;" />
+                                    <RadzenImage Path=@(question.ImageSrc) Style="width: 50%;"/>
                                 }
                                 <RadzenRadioButtonList @bind-Value=@question.CurrentAnswer Orientation=Orientation.Vertical>
                                     <Items>
@@ -153,6 +153,7 @@
     }
     async Task ButtonClicked()
     {
+        showAnswer = false;
         if (takeQuestionNumber != 0)
         {
             await GetQuestionByNumber();
@@ -165,7 +166,6 @@
             if (confirmResult == false)
                 return;
         }
-        showAnswer = false;
         await RefreshQuestion();
         NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Info, Summary = "Info", Detail = "Refresh success" });
     }
