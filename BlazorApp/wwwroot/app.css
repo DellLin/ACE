@@ -64,3 +64,9 @@ h1:focus {
 .rz-radiobutton-label {
     white-space: pre-line;
 }
+.ace-setting {
+    position: sticky;
+    top: 0;
+    background-color: var(--rz-layout-background-color);
+    z-index:1000;
+}

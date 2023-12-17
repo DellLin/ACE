@@ -34,7 +34,7 @@
             <RadzenPanelMenuItem Text="Home" Icon="home" Path="" />
         </RadzenPanelMenu>
     </RadzenSidebar>
-    <RadzenBody>
+    <RadzenBody class="rz-py-0">
         <PageTitle>ACE</PageTitle>
         <h1>ACE</h1>
         @if (questions == null)
@@ -43,7 +43,8 @@
         }
         else
         {
-            <RadzenRow>
+            <div class="ace-setting rz-py-2">
+            <RadzenRow  Gap="10" RowGap="0">
 
                 <RadzenColumn Size="6" SizeXS="2" SizeSM="2" SizeMD="2" SizeLG="1" SizeXL="1">
                     <RadzenFormField Text="指定題號" Style="width: 100%;">
@@ -61,16 +62,14 @@
                     </RadzenStack>
                 </RadzenColumn>
 
-                <RadzenColumn Size="12" SizeXS="3" SizeSM="2" SizeMD="2" SizeLG="1" SizeXL="1">
+                <RadzenColumn Size="6" SizeXS="3" SizeSM="2" SizeMD="2" SizeLG="1" SizeXL="1">
                     <RadzenButton Click=@(args => ButtonClicked()) Text="Refresh" ButtonStyle="ButtonStyle.Secondary" Style="width: 100%;margin: var(--rz-form-field-margin)" />
                 </RadzenColumn>
-                <RadzenColumn Size="12" SizeXS="3" SizeSM="2" SizeMD="2" SizeLG="1" SizeXL="1">
+                <RadzenColumn Size="6" SizeXS="3" SizeSM="2" SizeMD="2" SizeLG="1" SizeXL="1">
                     <RadzenButton Click=@(args => Submit()) Text="Submit" ButtonStyle="ButtonStyle.Success" Style="width: 100%;margin: var(--rz-form-field-margin)" />
                 </RadzenColumn>
             </RadzenRow>
-            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Start">
-            </RadzenStack>
-
+            </div>
             @foreach (var question in questions)
             {
                 <RadzenRow>
